@@ -1,0 +1,46 @@
+#importing from socket module
+from socket import AF_INET, SOCK_STREAM, socket 
+if __name__ == "__main__": 
+    print("application has started") 
+    #creating the client socket 
+    cliS = socket(AF_INET, SOCK_STREAM) 
+    #stating that the server address is ("127.0.0.1",25) 
+    servAdr = ("127.0.0.1",25) 
+    #connecting the client socket to the server socket 
+    cliS.connect(servAdr) 
+    #importing the smtplib module
+    import smtplib 
+    #importing MIMEText from email.mime.text module to allow sending emails
+    from email.mime.text import MIMEText 
+    print("HELLO") 
+    #the variable messagebod contains the message that will be sent in the email
+    messagebod = ("email message") 
+    #placing the variable messagebod on the email
+    message = MIMEText(messagebod, "plain") 
+    #the subject of the email sent will be "email subject"
+    message["subject"] = "email subject" 
+    #assigning the sender and the receiver of the email
+    message["from"]    = "cw1compsys@gmail.com" 
+    message["to"]      = "hanyanagibe@gmail.com" 
+    print("mail from: cw1compsys@gmail.com") 
+    print("RCPT TO: hanyanagibe@gmail.com") 
+    #using the try function to check whether there is an error or not
+    try: 
+        #stating that gmail will be used, and its port (SSL) is 465
+        #SSL is the secure socket layer
+        server = smtplib.SMTP_SSL("smtp.gmail.com", 465) 
+        #logging in with the email and password
+        server.login("cw1compsys@gmail.com", "networksCW1") 
+        #sending the email by stating the sender, the receiver, and the message
+        server.sendmail("cw1compsys@gmail.com", "hanyanagibe@gmail.com", message.as_string())
+        #terminating the SMTP session and closing the connection
+        server.quit() 
+        print("DATA") 
+        print("Successfully sent email") 
+    except: 
+        print("Error: unable to send email")
+    #the user need to press enter to close the socket and end the connection 
+    input("press enter to close socket") 
+    #closing the client socket 
+    cliS.close() 
+    print("QUIT")
