@@ -1,0 +1,47 @@
+#importing from socket module
+from socket import AF_INET, SOCK_STREAM, socket
+#importing the getpid function from the os module 
+from os import getpid 
+if __name__ == "__main__": 
+    print("application has started") 
+    print("the proccess id assigned by OS: %d" %getpid()) 
+    #creating the server socket in variable servS
+    servS = socket(AF_INET, SOCK_STREAM) 
+    print("file desriptor assigned by OS: ", servS.fileno()) 
+    #binding the server socket to the address
+    servS.bind(("127.0.0.1",25)) 
+    #the number of pending connections the queue will hold is assigned 0 by backlog
+    backlog = 0 
+    #the socket will wait for connection requests
+    servS.listen(backlog)
+    #the socket will now be able to accept connections from the client
+    clientsocket, clientAdr = servS.accept() 
+    print("new client connected from %s:%d" % clientAdr) 
+    print("220-service ready") 
+    #the length of the email is within 1024 bytes
+    rlen = 1024 
+    #the variable 'email' is set for receiving the email from the client
+    email = clientsocket.recv(rlen) 
+    print("250-OK") 
+    #importing regular expression to match the strings for the mac address
+    #importing the universal unique identifier so that it generates the mac address
+    import re, uuid 
+    #extracting the mac address and forming it in the simple way
+    m = (':'.join(re.findall('..', '%012x' % uuid.getnode()))) 
+    print("the mac address is", m) 
+    #importing socket to get the ip address
+    import socket 
+    #getting the computer's name
+    hostname = socket.gethostname() 
+    #extracting the ip address and placing it in the variable 'ip'
+    ip = socket.gethostbyname(hostname) 
+    print("the ip address is", ip) 
+    print("the protocol type is SMTP")
+    print("the port address is'25'")
+    print("250-OK") 
+    input("press enter to close socket") 
+    #closing the client socket
+    clientsocket.close() 
+    #closing the server socket 
+    servS.close() 
+    print("221-connection closed") 
